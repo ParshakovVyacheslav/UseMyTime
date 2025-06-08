@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Редактирование профиля{% endblock %}
+th {
+    margin-right: 10px;
+}
+{% block content %}
+    <h1>Редактировать профиль</h1>
+    <p>Вы можете использовать следующую форму для редактирования профиля:</p>
+    <form method="post" enctype="multipart/form-data">
+        <table style="border-collapse: separate; border-spacing: 10px;">
+            {{ user_form.as_table }}
+            {{ profile_form.as_table }}
+        </table>
+        {% csrf_token %}
+        <p><input type="submit" value="Сохранить изменения" class="btn text-white" 
+            style="background-color: rgb(6, 46, 101); border-radius:0px;"></p>
+    </form>
+{% endblock %}

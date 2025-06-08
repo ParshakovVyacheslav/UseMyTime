@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Профиль{% endblock %}
+{% block style %}
+td, th {
+    padding: 10px;
+    margin: 10px;
+    border: silver 1px solid;
+}
+table {
+    border-collapse: collapse;
+    border: silver 1px solid;
+}
+{% endblock style %}
+{% block content %}
+    <h1>{{ user.last_name }} {{ user.first_name }} {{ user.profile.surname }}</h1>
+    <table>
+        <tr>
+            <th>Фамилия</th>
+            <td>{{ user.first_name }}</td>
+        </tr>
+        <tr>
+            <th>Имя</th>
+            <td>{{ user.last_name }}</td>
+        </tr>
+        <tr>
+            <th>Отчество</th>
+            <td>{{ user.profile.surname }}</td>
+        </tr>
+        <tr>
+            <th>Адрес электронной почты</th>
+            <td>{{ user.email }}</td>
+        </tr>
+        <tr>
+            <th>Имя пользователя</th>
+            <td>{{ user.username }}</td>
+        </tr>
+    </table>
+    <p><a href="{% url 'profile_edit' %}">Редактировать профиль</a></p>
+    <p><a href="{% url 'password_change' %}">Сменить пароль</a></p>
+{% endblock %}

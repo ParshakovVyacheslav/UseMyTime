@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Вход{% endblock %}
+{% block content %}
+    <h1>Вход</h1>
+    {% if form.errors %}
+        <p>
+            Неверный логин или пароль.
+            Пожалуйста, попробуйте снова.
+        </p>
+    {% endif %}
+    <p>
+        Пожалуйста, заполните форму для входа в аккаунт.
+        Если у вас нет аккаунта, вы можете
+        <a href="{% url "register" %}">зарегистрироваться</a>.
+    </p>
+    <form action="{% url 'login' %}" method="post" class="mb-3">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+            {{ form.username.label_tag }}<br>
+            {{ form.username}}
+        </div>
+        
+        <div class="mb-3">
+            {{ form.password.label_tag }}<br>
+            {{ form.password}}
+        </div>
+        
+        <input type="hidden" name="next" value="{{ next }}" />
+        
+        <p><input type="submit" value="Войти" class="btn text-white" 
+            style="background-color: rgb(6, 46, 101); border-radius:0px;"></p>
+    </form>
+    <p>
+        <a href="{% url "password_reset" %}">
+            Забыли пароль?
+        </a>
+    </p>
+{% endblock %}
