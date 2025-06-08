@@ -1,15 +1,17 @@
 {% extends "base.html" %}
 {% block title %}Профиль{% endblock %}
 {% block style %}
-td, th {
-    padding: 10px;
-    margin: 10px;
-    border: silver 1px solid;
-}
-table {
-    border-collapse: collapse;
-    border: silver 1px solid;
-}
+<style>
+    td, th {
+        padding: 10px;
+        margin: 10px;
+        border: silver 1px solid;
+    }
+    table {
+        border-collapse: collapse;
+        border: silver 1px solid;
+    }
+</style>
 {% endblock style %}
 {% block content %}
     <h1>{{ user.last_name }} {{ user.first_name }} {{ user.profile.surname }}</h1>
