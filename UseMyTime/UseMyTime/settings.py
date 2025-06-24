@@ -20,6 +20,7 @@ INSTALLED_APPS = [
 
     'contacts.apps.ContactsConfig',
     'work_programs.apps.WorkProgramsConfig',
+    'projects.apps.ProjectsConfig'
 ]
 
 MIDDLEWARE = [

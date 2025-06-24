@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}
+    {% if object %}Редактирование проекта{% else %}Создание проекта{% endif %}
+{% endblock %}
+{% block content %}
+    <h1>Готово!</h1>
+    <p>Проект был успешно удален. Вы можете вернуться на <a href="{% url 'index' %}">главную</a></p>
+{% endblock %}

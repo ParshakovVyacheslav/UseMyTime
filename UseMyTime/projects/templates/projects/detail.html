@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Проект "{{ object.title }}"{% endblock %}
+{% block content %}
+    <h1>{{ object.title }}</h1>
+    <p class="mb-4">{{ object.description }}</p>
+    <hr>
+    <div class="row">
+        <div class="col text-start w-75"><h2 class="fw-light">Общее время работы над проектом</h2></div>
+        <div class="col text-end"><h1>{{ object.get_hours_minutes.0 }} часов {{ object.get_hours_minutes.1 }} мин</h1></div>
+    </div>
+    <hr>
+    {% if object.project_programs.all %}
+    <h2 class="fw-light">Время работы в программах</h2>
+    <table>
+        {% for project_program in object.project_programs.all %}
+        <tr>
+            <th class="pe-3 ps-5">{{ project_program.program.name }}</th>
+            <td>{{ project_program.get_hours_minutes.0 }} часов {{ project_program.get_hours_minutes.1 }} мин</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <hr>
+    {% endif %}
+    <div class="d-flex justify-content-between mt-4">
+        <div>
+            {% if not object.is_archived %}
+                {% if not user.active_project or user.active_project.project != object %}
+                <form action="{% url 'projects_activate' %}" method="post" class="d-inline me-2">
+                    {% csrf_token %}
+                    <input type="hidden" name="project_id" value="{{ object.pk }}">
+                    <button type="submit" class="btn text-white" 
+                            style="background-color: rgb(6, 46, 101); border-radius:0px;">
+                        Активировать проект
+                    </button>
+                </form>
+                {% endif %}
+                
+                <form action="{% url 'projects_archivate' object.id %}" method="post" class="d-inline me-2">
+                    {% csrf_token %}
+                    <button type="submit" class="btn text-white" 
+                            style="background-color: rgb(6, 46, 101); border-radius:0px;">
+                        В архив
+                    </button>
+                </form>
+            {% endif %}
+        </div>
+        
+        <div>
+            <a href="{% url 'project_update' object.pk %}" 
+            class="btn text-white me-2"
+            style="background-color: rgb(6, 46, 101); border-radius:0px;">
+                Редактировать
+            </a>
+            <a href="{% url 'project_delete' object.pk %}" 
+            class="btn btn-danger"
+            style="border-radius:0px;"
+            onclick="return confirm('Вы уверены, что хотите удалить этот проект?');">
+                Удалить
+            </a>
+        </div>
+    </div>
+{% endblock %}

@@ -23,6 +23,7 @@ class Contact(models.Model):
 
     def get_formatted_phone(self):
         phone = self.phone
+        if not phone: return ''
         if phone.startswith('8'):
             phone = '+7' + phone[1:]
         return f'{phone[:2]} ({phone[2:5]}) {phone[5:8]}-{phone[8:10]}-{phone[10:]}'

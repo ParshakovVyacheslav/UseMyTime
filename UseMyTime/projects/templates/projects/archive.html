@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Архив проектов{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Архив проектов</h1>
+        
+        {% if object_list %}
+            {% for project in object_list %}
+                <div class="project-item mb-4">
+                    <h3>{{ project.title }}</h3>
+                    <p class="text-muted mb-3">{{ project.description }}</p>
+                    <a href="{% url 'project_detail' project.pk %}" 
+                       class="btn text-white mb-4"
+                       style="background-color: rgb(6, 46, 101); border-radius:0px;">
+                        Перейти к проекту
+                    </a>
+                    {% if not forloop.last %}
+                        <hr class="my-4">
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-info">
+                В архиве нет проектов
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
