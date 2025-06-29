@@ -27,7 +27,11 @@
                         {% endif %}
                     </div>
                     <div class="me-5 pt-2">
-                        <div class="fw-bold">{{ user.last_name }} {{ user.first_name }} {{ user.profile.surname }}</div>
+                        <div class="fw-bold">
+                            {% if not user.first_name %}{{ user.username }}
+                            {% else %}{{ user.last_name }} {{ user.first_name }} {% if user.profile.surname %} {{ user.profile.surname }}{% endif %}
+                            {% endif %}
+                        </div>
                         <div class="small text-white-50">{{ user.email }}</div>
                     </div>
                     <a href="{% url 'profile_edit' %}" class="text-decoration-none text-white pt-4">
