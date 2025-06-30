@@ -8,6 +8,7 @@ SECRET_KEY = 'django-insecure-$7q(yh6(=c9v@#4mq4_6)r_^ci(j80ouf3u1o-q&)4g-bafw-x
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = ['https://usemytime.onrender.com']
 
 INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
