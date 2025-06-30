@@ -5,7 +5,7 @@ def create_test_data(sender, **kwargs):
     from django.contrib.auth import get_user_model
     User = get_user_model()
     User.objects.filter(username='root').delete()
-    User.objects.create_superuser('root', 'root@example.com', 'root')
+    user = User.objects.create_superuser('root', 'root@example.com', 'root')
 
     from contacts.models import Contact
     Contact.objects.all().delete()
@@ -15,6 +15,9 @@ def create_test_data(sender, **kwargs):
                             position='Разработчик',
                             email='parsakovslava03@gmail.com',
                             phone='89133627577')
+    
+    from accounts.models import Profile
+    Profile.objects.create(user=user)
 
     from work_programs.models import WorkProgram
     WorkProgram.objects.all().delete()
