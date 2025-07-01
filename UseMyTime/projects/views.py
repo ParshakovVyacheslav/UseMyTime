@@ -6,7 +6,7 @@ from django.views.generic import UpdateView, CreateView, DeleteView, ListView, D
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-from .models import Project, ProjectProgram, ActiveProject
+from .models import Project, ProjectProgram, ActiveProject, Task
 from work_programs.models import WorkProgram
 
 class ProjectCreateView(LoginRequiredMixin, CreateView):
@@ -15,9 +15,14 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
     fields = ['title', 'description']
     def form_valid(self, form):
         form.instance.user = self.request.user
+        project = form.save()
+        tasks_texts = [t.strip() for t in self.request.POST.getlist('tasks') if t.strip()]
+        for text in tasks_texts:
+            Task.objects.create(project=project, text=text)
         return super().form_valid(form)
     def get_success_url(self):
         return reverse_lazy('project_detail', kwargs={'pk': self.object.pk})
+    
 
 class ProjectUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'projects/create_update.html'
@@ -27,10 +32,22 @@ class ProjectUpdateView(LoginRequiredMixin, UpdateView):
         return reverse_lazy('project_detail', kwargs={'pk': self.object.pk})
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
+    def form_valid(self, form):
+        project = form.save()
+        tasks_texts = [t.strip() for t in self.request.POST.getlist('tasks') if t.strip()]
+        for task in project.tasks.all():
+            if task.text not in tasks_texts:
+                task.delete()
+        existing_texts = [task.text for task in project.tasks.all()]
+        for text in tasks_texts:
+            if text not in existing_texts:
+                Task.objects.create(project=project, text=text)
+        return super().form_valid(form)
 
 class ProjectDeleteView(LoginRequiredMixin, DeleteView):
     model = Project
     success_url = reverse_lazy('project_create')
+    template_name = 'projects/delete_confirm.html'
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
 
@@ -109,3 +126,15 @@ def project_archive(request, id):
         return HttpResponseRedirect(reverse_lazy('project_detail', kwargs={'pk': id}))
     except Project.DoesNotExist:
         return HttpResponseRedirect(reverse_lazy('project_detail', kwargs={'pk': id}))
+
+@require_POST
+@login_required
+def change_task_status(request, id):
+    try:
+        task = Task.objects.get(id=id, project__user=request.user)
+        task.is_done = not task.is_done
+        task.save()
+        return JsonResponse({'is_success': True})
+    except Task.DoesNotExist:
+        return JsonResponse({'is_success': False,
+                             'error': 'Task not found'})

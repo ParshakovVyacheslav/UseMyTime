@@ -16,6 +16,7 @@
             Пожалуйста, исправьте ошибки ниже.
         </p>
     {% endif %}
+    <hr>
     
     <form method="post" class="mb-3">
         {% csrf_token %}
@@ -36,6 +37,26 @@
             {% endif %}
         </div>
         
+        <hr>
+        <div class="mb-3">
+            <h3>Задачи</h3>
+            <div id="tasks-container">
+                {% for task in object.tasks.all|default:'' %}
+                <div class="task-item mb-2">
+                    <input type="text" name="tasks" value="{{ task.text }}" class="d-inline-block w-auto">
+                    <button type="button" class="btn btn-sm btn-danger remove-task ms-2">×</button>
+                </div>
+                {% endfor %}
+            </div>
+            <button type="button" 
+                    id="add-task" 
+                    class="btn btn-sm text-white mt-2" 
+                    style="background-color: rgb(6, 46, 101); border-radius:0px;">
+                Добавить задачу
+            </button>
+        </div>
+        <hr>
+
         <p>
             <input type="submit" 
                    value="{% if object %}Сохранить изменения{% else %}Создать проект{% endif %}" 
@@ -49,11 +70,35 @@
             {% if object %}
                 <a href="{% url 'project_delete' object.pk %}" 
                    class="btn btn-danger" 
-                   style="border-radius:0px;"
-                   onclick="return confirm('Вы уверены, что хотите удалить этот проект?');">
+                   style="border-radius:0px;">
                     Удалить
                 </a>
             {% endif %}
         </p>
     </form>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('tasks-container');
+            const addButton = document.getElementById('add-task');
+            
+            // Добавление новой задачи
+            addButton.addEventListener('click', function() {
+                const taskDiv = document.createElement('div');
+                taskDiv.className = 'task-item mb-2';
+                taskDiv.innerHTML = `
+                    <input type="text" name="tasks" class="d-inline-block w-auto" placeholder="Текст задачи">
+                    <button type="button" class="btn btn-sm btn-danger remove-task ms-2">×</button>
+                `;
+                container.appendChild(taskDiv);
+            });
+            
+            // Удаление задачи
+            container.addEventListener('click', function(e) {
+                if (e.target.classList.contains('remove-task')) {
+                    e.target.parentElement.remove();
+                }
+            });
+        });
+    </script>
 {% endblock %}

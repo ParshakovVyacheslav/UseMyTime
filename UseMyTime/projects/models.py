@@ -47,3 +47,11 @@ class ActiveProject(models.Model):
                                         null=True, blank=True)
     in_work = models.BooleanField(default=False)
     last_started_at = models.DateTimeField(auto_now=True)
+
+class Task(models.Model):
+    project = models.ForeignKey(Project, 
+                                on_delete=models.CASCADE,
+                                related_name='tasks')
+    text = models.TextField(verbose_name='Текст задачи')
+    is_done = models.BooleanField(default=False, verbose_name='Выполнено')
+    created_at = models.DateTimeField(auto_now_add=True)

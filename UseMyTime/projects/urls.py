@@ -12,4 +12,5 @@ urlpatterns = [
     path('activate/', views.project_activate, name='projects_activate'),
     path('start/', views.project_start, name='projects_start'),
     path('stop/', views.project_stop, name='projects_stop'),
+    path('task/<int:id>', views.change_task_status, name='change_task_status')
 ]

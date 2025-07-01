@@ -4,6 +4,23 @@
     <h1>{{ object.title }}</h1>
     <p class="mb-4">{{ object.description }}</p>
     <hr>
+    {% if object.tasks.all %}
+    <h2 class="fw-light">Список задач</h2>
+    <ul class="list-unstyled">
+        {% for task in object.tasks.all %}
+        <li class="mb-2 d-flex align-items-center">
+            <input type="checkbox" 
+                class="task-checkbox me-2" 
+                data-task-id="{{ task.id }}"
+                {% if task.is_done %}checked{% endif %}>
+            <span class="{% if task.is_done %}text-muted text-decoration-line-through{% endif %}">
+                {{ task.text }}
+            </span>
+    </li>
+    {% endfor %}
+</ul>
+    <hr>
+    {% endif %}
     <div class="row">
         <div class="col text-start w-75"><h2 class="fw-light">Общее время работы над проектом</h2></div>
         <div class="col text-end"><h1>{{ object.get_hours_minutes.0 }} часов {{ object.get_hours_minutes.1 }} мин</h1></div>
@@ -53,10 +70,37 @@
             </a>
             <a href="{% url 'project_delete' object.pk %}" 
             class="btn btn-danger"
-            style="border-radius:0px;"
-            onclick="return confirm('Вы уверены, что хотите удалить этот проект?');">
+            style="border-radius:0px;">
                 Удалить
             </a>
         </div>
     </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const taskId = this.dataset.taskId;
+                    fetch("{% url 'change_task_status' 0 %}".replace('0', taskId), {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({})
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.is_success) {
+                            const taskText = this.nextElementSibling;
+                            taskText.classList.toggle('text-muted');
+                            taskText.classList.toggle('text-decoration-line-through');
+                        } else {
+                            this.checked = !this.checked;
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 {% endblock %}
