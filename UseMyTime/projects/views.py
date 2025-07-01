@@ -9,7 +9,7 @@ from django.utils import timezone
 from .models import Project, ProjectProgram, ActiveProject
 from work_programs.models import WorkProgram
 
-class ProjectCreateView(CreateView, LoginRequiredMixin):
+class ProjectCreateView(LoginRequiredMixin, CreateView):
     template_name = 'projects/create_update.html'
     model = Project
     fields = ['title', 'description']
@@ -19,7 +19,7 @@ class ProjectCreateView(CreateView, LoginRequiredMixin):
     def get_success_url(self):
         return reverse_lazy('project_detail', kwargs={'pk': self.object.pk})
 
-class ProjectUpdateView(UpdateView, LoginRequiredMixin):
+class ProjectUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'projects/create_update.html'
     model = Project
     fields = ['title', 'description']
@@ -28,19 +28,19 @@ class ProjectUpdateView(UpdateView, LoginRequiredMixin):
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
 
-class ProjectDeleteView(DeleteView, LoginRequiredMixin):
+class ProjectDeleteView(LoginRequiredMixin, DeleteView):
     model = Project
     success_url = reverse_lazy('project_create')
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
 
-class ArchiveProjectListView(ListView, LoginRequiredMixin):
+class ArchiveProjectListView(LoginRequiredMixin, ListView):
     template_name = 'projects/archive.html'
     model = Project
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user).filter(is_archived=True)
 
-class ProjectDetailView(DetailView, LoginRequiredMixin):
+class ProjectDetailView(LoginRequiredMixin, DetailView):
     template_name = 'projects/detail.html'
     model = Project
     def get_queryset(self):
