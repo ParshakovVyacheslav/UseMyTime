@@ -5,13 +5,14 @@ from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm
 from .models import Profile
 from django.contrib import messages
 
+# Отображение профиля
 @login_required
 def profile(request):
     return render(request,
                   'accounts/profile.html',
                   {'section': 'profile'})
 
-
+# Регистрация пользователя
 def register(request):
     if request.method == 'POST':
         user_form = UserRegistrationForm(request.POST)
@@ -30,7 +31,7 @@ def register(request):
                   'accounts/register.html',
                   {'user_form': user_form})
 
-
+# Редактирование данных пользователя
 @login_required
 def edit(request):
     if request.method == 'POST':

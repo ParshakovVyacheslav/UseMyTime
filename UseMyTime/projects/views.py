@@ -9,6 +9,7 @@ from django.utils import timezone
 from .models import Project, ProjectProgram, ActiveProject, Task
 from work_programs.models import WorkProgram
 
+# Создание проекта
 class ProjectCreateView(LoginRequiredMixin, CreateView):
     template_name = 'projects/create_update.html'
     model = Project
@@ -23,7 +24,7 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse_lazy('project_detail', kwargs={'pk': self.object.pk})
     
-
+# Обновление проекта
 class ProjectUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'projects/create_update.html'
     model = Project
@@ -44,6 +45,7 @@ class ProjectUpdateView(LoginRequiredMixin, UpdateView):
                 Task.objects.create(project=project, text=text)
         return super().form_valid(form)
 
+# Удаление проекта
 class ProjectDeleteView(LoginRequiredMixin, DeleteView):
     model = Project
     success_url = reverse_lazy('project_create')
@@ -51,18 +53,21 @@ class ProjectDeleteView(LoginRequiredMixin, DeleteView):
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
 
+# Получение архива проектов
 class ArchiveProjectListView(LoginRequiredMixin, ListView):
     template_name = 'projects/archive.html'
     model = Project
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user).filter(is_archived=True)
 
+# Получение конкретного проекта
 class ProjectDetailView(LoginRequiredMixin, DetailView):
     template_name = 'projects/detail.html'
     model = Project
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
 
+# Активация проекта
 @require_POST
 @login_required
 def project_activate(request):
@@ -76,6 +81,7 @@ def project_activate(request):
     active_project.save()
     return HttpResponseRedirect(reverse_lazy('project_detail', kwargs={'pk': project_id}))
 
+# Запуска активного проекта
 @require_POST
 @login_required
 def project_start(request):
@@ -93,6 +99,7 @@ def project_start(request):
     active_project.save()
     return JsonResponse({'is_success': True})
 
+# Остановка активного проекта
 @require_POST
 @login_required
 def project_stop(request):
@@ -116,6 +123,7 @@ def project_stop(request):
         project_program.save()
     return JsonResponse({'is_success': True})
 
+# Архивация проекта
 @require_POST
 @login_required
 def project_archive(request, id):
@@ -127,6 +135,7 @@ def project_archive(request, id):
     except Project.DoesNotExist:
         return HttpResponseRedirect(reverse_lazy('project_detail', kwargs={'pk': id}))
 
+# Изменение статуса задачи
 @require_POST
 @login_required
 def change_task_status(request, id):

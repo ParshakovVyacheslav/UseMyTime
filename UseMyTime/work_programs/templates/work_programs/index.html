@@ -10,6 +10,7 @@
 </style>
 {% endblock %}
 {% block content %}
+    <!-- Отображение и поиск программ -->
     <h1>Выбор программ</h1>
     <form method="get" action="{% url 'programs' %}" id="search">
         <input type="text" name="search" value="{{ search }}" class="m-3">
@@ -27,6 +28,7 @@
             style="background-color: rgb(6, 46, 101); border-radius:0px; width: 100px"></p>
     </form>
     
+    <!-- Список выбранных программ -->
     <div class="position-fixed end-0 bottom-0 p-3 selected-programs-container">
         <div class="d-flex align-items-center mb-3">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-check2 me-2" viewBox="0 0 16 16">
@@ -55,6 +57,7 @@
         </div>
     </div>
 
+    <!-- Скрипт для поиска программ -->
     <script>
         search_form = document.getElementById('search')
         document.getElementById('search').addEventListener('keypress', function(e) {

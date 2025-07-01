@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 
+# Модель для программ в разделе "Выбранные программы"
 class WorkProgram(models.Model):
     name = models.CharField(max_length=200)
     users = models.ManyToManyField(settings.AUTH_USER_MODEL, 

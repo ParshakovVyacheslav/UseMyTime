@@ -100,6 +100,7 @@ LOGIN_REDIRECT_URL = 'profile'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 
+# Настройка раздачи почты
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 else:

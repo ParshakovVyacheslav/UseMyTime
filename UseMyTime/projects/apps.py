@@ -1,6 +1,7 @@
 from django.apps import AppConfig
 from django.db.models.signals import post_migrate
 
+# Создание тестовых данных
 def create_test_data(sender, **kwargs):
     from django.contrib.auth import get_user_model
     User = get_user_model()
@@ -33,5 +34,6 @@ class ProjectsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'projects'
     
+    # Выполнение создания тестовых данных
     def ready(self):
         post_migrate.connect(create_test_data, sender=self)

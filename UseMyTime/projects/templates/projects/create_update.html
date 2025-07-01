@@ -21,6 +21,7 @@
     <form method="post" class="mb-3">
         {% csrf_token %}
         
+        <!-- Название проекта -->
         <div class="mb-3">
             {{ form.title.label_tag }}<br>
             {{ form.title }}
@@ -28,7 +29,8 @@
                 <div class="text-danger">{{ form.title.errors }}</div>
             {% endif %}
         </div>
-        
+
+        <!-- Описание проекта -->
         <div class="mb-3">
             {{ form.description.label_tag }}<br>
             {{ form.description }}
@@ -37,6 +39,7 @@
             {% endif %}
         </div>
         
+        <!-- Добавление задач -->
         <hr>
         <div class="mb-3">
             <h3>Задачи</h3>
@@ -58,15 +61,18 @@
         <hr>
 
         <p>
+            <!-- Кнопка создания/изменения -->
             <input type="submit" 
                    value="{% if object %}Сохранить изменения{% else %}Создать проект{% endif %}" 
                    class="btn text-white" 
                    style="background-color: rgb(6, 46, 101); border-radius:0px;">
+            <!-- Кнопка отмены -->
             <a href="{% if object %}{% url 'project_detail' object.pk %}{% else %}{% url 'project_create' %}{% endif %}" 
                class="btn btn-secondary" 
                style="border-radius:0px;">
                 Отмена
             </a>
+            <!-- Кнопка удаления -->
             {% if object %}
                 <a href="{% url 'project_delete' object.pk %}" 
                    class="btn btn-danger" 

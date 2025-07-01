@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import RegexValidator
 
+# Модель контактов (отображаются на главной странице контактов)
 class Contact(models.Model):
     first_name = models.CharField(max_length=200, verbose_name='Имя')
     last_name = models.CharField(max_length=200, verbose_name='Фамилия')
@@ -38,7 +39,7 @@ class Contact(models.Model):
         verbose_name = 'Контакт'
         verbose_name_plural = 'Контакты'
     
-
+# Модель для вопросов разработчикам
 class Question(models.Model):
     name = models.CharField(max_length=600, verbose_name='Имя')
     email = models.EmailField(verbose_name='Email')

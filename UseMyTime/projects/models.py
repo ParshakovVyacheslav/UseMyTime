@@ -3,6 +3,7 @@ from django.conf import settings
 from work_programs.models import WorkProgram
 from datetime import timedelta
 
+# Модель проектов
 class Project(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE,
@@ -22,6 +23,8 @@ class Project(models.Model):
         seconds = int(self.total_time.total_seconds())
         return [seconds // 3600, (seconds % 3600) // 60] # [hours, minutes]
 
+# Промежуточная модель между программами и проектами
+# Хранит время работы над проектом для каждой программы
 class ProjectProgram(models.Model):
     program = models.ForeignKey(WorkProgram, 
                                 on_delete=models.CASCADE,
@@ -35,6 +38,8 @@ class ProjectProgram(models.Model):
         seconds = int(self.total_time.total_seconds())
         return [seconds // 3600, (seconds % 3600) // 60] # [hours, minutes]
 
+# Модель активного проекта
+# Для него и будет учитываться время
 class ActiveProject(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL,
                                 on_delete=models.CASCADE,
@@ -48,6 +53,7 @@ class ActiveProject(models.Model):
     in_work = models.BooleanField(default=False)
     last_started_at = models.DateTimeField(auto_now=True)
 
+# Модель подзадач проекта
 class Task(models.Model):
     project = models.ForeignKey(Project, 
                                 on_delete=models.CASCADE,

@@ -1,26 +1,31 @@
 {% extends "base.html" %}
 {% block title %}Проект "{{ object.title }}"{% endblock %}
 {% block content %}
+    <!-- Название и описание -->
     <h1>{{ object.title }}</h1>
     <p class="mb-4">{{ object.description }}</p>
     <hr>
+
+    <!-- Список задач -->
     {% if object.tasks.all %}
     <h2 class="fw-light">Список задач</h2>
     <ul class="list-unstyled">
         {% for task in object.tasks.all %}
-        <li class="mb-2 d-flex align-items-center">
-            <input type="checkbox" 
-                class="task-checkbox me-2" 
-                data-task-id="{{ task.id }}"
-                {% if task.is_done %}checked{% endif %}>
-            <span class="{% if task.is_done %}text-muted text-decoration-line-through{% endif %}">
-                {{ task.text }}
-            </span>
-    </li>
-    {% endfor %}
-</ul>
+            <li class="mb-2 d-flex align-items-center">
+                <input type="checkbox" 
+                    class="task-checkbox me-2" 
+                    data-task-id="{{ task.id }}"
+                    {% if task.is_done %}checked{% endif %}>
+                <span class="{% if task.is_done %}text-muted text-decoration-line-through{% endif %}">
+                    {{ task.text }}
+                </span>
+        </li>
+        {% endfor %}
+    </ul>
     <hr>
     {% endif %}
+
+    <!-- Данные о времени работы -->
     <div class="row">
         <div class="col text-start w-75"><h2 class="fw-light">Общее время работы над проектом</h2></div>
         <div class="col text-end"><h1>{{ object.get_hours_minutes.0 }} часов {{ object.get_hours_minutes.1 }} мин</h1></div>
@@ -37,6 +42,8 @@
         {% endfor %}
     </table>
     <hr>
+
+    <!-- Кнопки управления проектом -->
     {% endif %}
     <div class="d-flex justify-content-between mt-4">
         <div>
@@ -77,6 +84,7 @@
     </div>
     
     <script>
+        // Изменения статуса задачи is_done
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.task-checkbox').forEach(checkbox => {
                 checkbox.addEventListener('change', function() {

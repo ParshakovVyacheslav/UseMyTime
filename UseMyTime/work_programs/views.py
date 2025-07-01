@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from .models import WorkProgram
 
+# Получение списка и добавление программ пользователю
 @login_required
 def programs(request):
     programs = WorkProgram.objects.all()
@@ -20,6 +21,7 @@ def programs(request):
                                                         'selected_programs': selected_programs,
                                                         'search': search}) 
 
+# Удаление программы из выбранных пользователем программ
 @require_POST
 @login_required
 def program_delete(request, id):
