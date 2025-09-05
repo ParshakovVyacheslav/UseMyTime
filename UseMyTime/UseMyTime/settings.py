@@ -103,14 +103,6 @@ LOGOUT_URL = 'logout'
 # Настройка раздачи почты
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-else:
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.yandex.com'
-EMAIL_HOST_USER = 'parshakov.vyacheslav13@yandex.ru'
-EMAIL_HOST_PASSWORD = 'fjphzgmisqjhnwuf'
-EMAIL_PORT = 465
-EMAIL_USE_SSL = True
-EMAIL_USE_TLS = False
     
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
